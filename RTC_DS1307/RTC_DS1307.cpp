@@ -96,3 +96,10 @@ void DS1307::remplissage_date(uint8_t jour_semaine, uint8_t jour, uint8_t mois, 
     horloge.date.nbr_mois=mois;
     horloge.date.annee=annee;
 }
+
+void DS1307::initialiser_horloge(void){
+    remplissage_heure(0,0,0);
+    remplissage_date(5,1,1,10);
+    setDate();
+    Serial.println("Horloge initialisée");
+}
