@@ -1,7 +1,7 @@
 #include "RTC_DS1307.h"
 #include <Wire.h>
 #define BASE_TEMPS_TIMER1_1S 49911U
-int time_decrement=20; //4H=14400s, 6H=21600s
+int time_decrement=20000; //4H=14400s, 6H=21600s
 
 const char* joursemaine[7] = {"Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"};
 const char* nommois[12] = {"Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"};
