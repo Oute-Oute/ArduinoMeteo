@@ -1,10 +1,11 @@
-unsigned char buffer[64];                   // buffer array for data receive over serial port
+unsigned char buffer[100];                   // buffer array for data receive over serial port
 int count=0;
 
 void setup()
 { 
   Serial.begin(9600);
   Serial1.begin(9600);
+  Serial1.print("$PMTK314,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29\r\n");
 }
 
 void clearBufferArray()                     // function to clear buffer array
@@ -13,6 +14,7 @@ void clearBufferArray()                     // function to clear buffer array
     {
         buffer[i]=NULL;
     }
+    int count=0;
 }
 
 void GetGPS_msg()
@@ -22,34 +24,35 @@ void GetGPS_msg()
   while(Serial1.available())
   {
     buffer[count++]=Serial1.read();      // writing data into array
-    if(count == 64)break;
+    if(count == 100)break;
   }
     //Serial.write(buffer,count);     // if no data transmission ends, write buffer to hardware serial port
 
 }
 
-void Parser(unsigned char buffer[64])
+void Parser(unsigned char buffer[100])
 {
-  char** message;
-  char* mot;
-  for(int i=0; buffer[i]!='*'; i++)
+  char *ptr;
+  char *result[20];   // Large enough to hold each datum
+  int count;
+  int i = 0;
+  ptr = strtok(buffer,",");   // Look for commas...
+  while (ptr != NULL)
   {
-    if (buffer[i]!=',')
-    {
-      **message += buffer[i];
-    }
-    else 
-    {
-      *mot = **message;
-      Serial.println(*mot);
-      message++ ;
-    }
+    result[i++] = ptr;
+    ptr = strtok (NULL, ",");
+  }
+  count = i;
+  for (i = 0; i < count; i++)
+  {
+    Serial.println(result[i]);   //$GPRMC,100245.000,A,4723.0089,N,00041.3693,E,0.00,7.04,171220,,,A*61
+    //Serial.print("     ");
   }
 }
 
 void loop() 
 { 
   GetGPS_msg();
-  Serial.write(buffer,count);     // if no data transmission ends, write buffer to hardware serial port
+  //Serial.write(buffer,count);     // if no data transmission ends, write buffer to hardware serial port
   Parser(buffer);
 }
