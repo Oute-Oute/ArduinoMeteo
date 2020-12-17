@@ -17,10 +17,7 @@ void setup() {
     date_horloge.jour           = 10;
     date_horloge.nbr_mois      = 12;
     date_horloge.annee          = 20;*/
-    clock.remplissage_heure(3,1,2);
-    clock.remplissage_date(3,11,12,20);
-    clock.printTime();
-    clock.setDate();
+    clock.initialiser_horloge();
   
 }
 
