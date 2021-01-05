@@ -1,17 +1,17 @@
-#include GPS.h
+#include "GPS.h"
 
 unsigned char buffer[100];                   // bufferfer array for data receive over serial port
 int count = 0;
 
-void clearBufferArray()
+void GPS::clearBufferArray(void)
 {
     for (int i = 0; i < count; i++)
     {
-        buffer[i] = NULL;
+        buffer[i] = 0;
     }
 }
 
-void GetGPS_msg()
+unsigned char* GPS::GetGPS_msg(void)
 {
 
     if (Serial1.available())
@@ -23,9 +23,10 @@ void GetGPS_msg()
         }
         count = 0;
     }
+    return buffer;
 }
 
-void Parser(char buf[100])
+void GPS::Parser(unsigned char buf[100])
 {
     char newtest[100];
     strcpy(newtest, buf);
@@ -67,18 +68,18 @@ void Parser(char buf[100])
     Serial.println(msg16);
 }
 
-bool buffer_Synchro_GPS(char* result[]) {
+bool GPS::buffer_Synchro_GPS(char* result[]) {
     if (result[0] == "$GPRMC") {
-        if (result[2] == 'A')return true;
+        if (result[2] == "A")return true;
         else return false;
     }
     if (result[0] == "$GPGGA") {
-        if (result[6] == '0')return false;
+        if (result[6] == "0")return false;
         else return true;
     }
 }
 
-void Choix_Msg_NMEA(int nmea) {
+void GPS::Choix_Msg_NMEA(int nmea) {
     if (nmea == 1) Serial1.println("$PMTK314,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29\r\n");
     else  if (nmea == 2) Serial1.println("$PMTK314,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29\r\n");
 }
