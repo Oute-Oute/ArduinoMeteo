@@ -1,8 +1,7 @@
 
 #include <Arduino.h>
 #include <Wire.h>
-#ifndef __DS1307_H__
-#define __DS1307_H__
+
 
 
 #define DS1307_I2C_ADDRESS 0x68
@@ -46,6 +45,3 @@ class DS1307 {
 	    Date_RTC date;
     }horloge;
 };
-
-
-#endif
