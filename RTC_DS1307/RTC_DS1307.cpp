@@ -19,14 +19,14 @@ void DS1307::getDate(){
     Wire.endTransmission();
     Wire.requestFrom(DS1307_I2C_ADDRESS, 7);
     // A few of these need masks because certain bits are control bits
-    second     = bcdToDec(Wire.read() & 0x7f);
+    seconde     = bcdToDec(Wire.read() & 0x7f);
     minute     = bcdToDec(Wire.read());
     hour       = bcdToDec(Wire.read() & 0x3f);// Need to change this if 12 hour am/pm
     dayOfWeek  = bcdToDec(Wire.read());
     dayOfMonth = bcdToDec(Wire.read());
     month      = bcdToDec(Wire.read());
     year       = bcdToDec(Wire.read());
-    remplissage_heure(second,minute,hour);
+    remplissage_heure(seconde,minute,hour);
     remplissage_date(dayOfWeek,dayOfMonth,month,year);
     //date_horloge.nom_mois     = nom_mois[bcdToDec(Wire.read())];
 
