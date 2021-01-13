@@ -17,7 +17,7 @@ void setup(void)
 
   iaqSensor.begin(BME680_I2C_ADDR_PRIMARY, Wire);
   output = "\nBSEC library version " + String(iaqSensor.version.major) + "." + String(iaqSensor.version.minor) + "." + String(iaqSensor.version.major_bugfix) + "." + String(iaqSensor.version.minor_bugfix);
-  Serial.println(output);
+  //Serial.println(output);
   checkIaqSensorStatus();
 
   bsec_virtual_sensor_t sensorList[10] = {
@@ -49,13 +49,13 @@ void loop(void)
     output = String(time_trigger);
     output += ", " + String(iaqSensor.rawTemperature);
     output += ", " + String(iaqSensor.pressure);
-    output += ", " + String(iaqSensor.rawHumidity);
-    output += ", " + String(iaqSensor.gasResistance);
+    output += ", " + String(iaqSensor.humidity);
+    //output += ", " + String(iaqSensor.rawHumidity);
+    //output += ", " + String(iaqSensor.gasResistance);
     output += ", " + String(iaqSensor.iaq);
     output += ", " + String(iaqSensor.iaqAccuracy);
-    output += ", " + String(iaqSensor.temperature);
-    output += ", " + String(iaqSensor.humidity);
-    output += ", " + String(iaqSensor.staticIaq);
+    //output += ", " + String(iaqSensor.temperature);    
+    //output += ", " + String(iaqSensor.staticIaq);
     output += ", " + String(iaqSensor.co2Equivalent);
     output += ", " + String(iaqSensor.breathVocEquivalent);
     Serial.println(output);
