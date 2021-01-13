@@ -1,7 +1,8 @@
 
 #include <Arduino.h>
 #include <Wire.h>
-
+#ifndef __DS1307_H__
+#define __DS1307_H__
 
 
 #define DS1307_I2C_ADDRESS 0x68
@@ -19,7 +20,7 @@ class DS1307 {
     void remplissage_heure(uint8_t seconde, uint8_t minute, uint8_t heure);
     void remplissage_date(uint8_t jour_semaine, uint8_t jour, uint8_t mois, uint8_t annee);
     void initialiser_horloge(void);
-    uint8_t second;
+    uint8_t seconde;
     uint8_t minute;
     uint8_t hour;
     uint8_t dayOfWeek;// day of week, 1 = Monday
@@ -45,3 +46,6 @@ class DS1307 {
 	    Date_RTC date;
     }horloge;
 };
+
+
+#endif

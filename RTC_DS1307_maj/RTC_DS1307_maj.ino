@@ -1,4 +1,5 @@
 #include "RTC_DS1307.h"
+#include "GPS.h"
 #include <Wire.h>
 #define BASE_TEMPS_TIMER1_1S 49911U
 int time_decrement=20000; //4H=14400s, 6H=21600s
@@ -7,7 +8,7 @@ const char* joursemaine[7] = {"Dimanche","Lundi","Mardi","Mercredi","Jeudi","Ven
 const char* nommois[12] = {"Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"};
 
 DS1307 clock;
-
+GPS donnees_GPS;
 
 ISR (TIMER1_OVF_vect) //FCT INTERRUPTION
 { noInterrupts();
@@ -18,7 +19,7 @@ ISR (TIMER1_OVF_vect) //FCT INTERRUPTION
   if (time_decrement<0){
     Serial.println("Maj_heure_requise");}
   else{
-    Serial.println("OKLM");
+    //Serial.println("OKLM");
     time_decrement--;
   }
 
@@ -54,7 +55,9 @@ void setup() {
     date_horloge.jour           = 10;
     date_horloge.nbr_mois      = 12;
     date_horloge.annee          = 20;*/
-    clock.initialiser_horloge();
+    donnees_GPS.Parser(donnees_GPS.buffer);
+    //Serial.print(donnees_GPS.results[1]);
+    clock.initialiser_horloge(donnees_GPS.results);
   
 }
 

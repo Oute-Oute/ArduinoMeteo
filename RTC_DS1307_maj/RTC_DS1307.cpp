@@ -97,9 +97,20 @@ void DS1307::remplissage_date(uint8_t jour_semaine, uint8_t jour, uint8_t mois, 
     horloge.date.annee=annee;
 }
 
-void DS1307::initialiser_horloge(void){
-    remplissage_heure(0,0,0);
-    remplissage_date(5,1,1,10);
+void DS1307::initialiser_horloge(char *GPS[16]){
+    //Serial.print(GPS[1);
+    //char heure_txt=GPS[1];
+    int winter=0;
+    int fuseau=1;
+    int heure=int((GPS[1][0]-48)*10+GPS[1][1]-48+fuseau+winter);
+    int minutes=int((GPS[1][2]-48)*10+GPS[1][3]-48);
+    int secondes=int((GPS[1][4]-48)*10+GPS[1][5]-48);
+    int jour=int((GPS[9][0]-48)*10+GPS[9][1]-48);
+    int mois=int((GPS[9][2]-48)*10+GPS[9][3]-48);
+    int annee=int((GPS[9][4]-48)*10+GPS[9][5]-48);
+    remplissage_heure(secondes,minutes,heure);
+    remplissage_date(5,jour,mois,annee);
     setDate();
+    //Serial.print(heure);
     Serial.println("Horloge initialisée");
 }
