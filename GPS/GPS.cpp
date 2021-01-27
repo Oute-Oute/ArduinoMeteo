@@ -28,44 +28,20 @@ unsigned char* GPS::GetGPS_msg(void)
 
 void GPS::Parser(unsigned char buf[100])
 {
-    char newtest[100];
-    strcpy(newtest, buf);
-    Serial.println(newtest);
     //delay(10);
 
-    char* msg1 = strtok(newtest, ",");
-    char* msg2 = strtok(NULL, ",");
-    char* msg3 = strtok(NULL, ",");
-    char* msg4 = strtok(NULL, ",");
-    char* msg5 = strtok(NULL, ",");
-    char* msg6 = strtok(NULL, ",");
-    char* msg7 = strtok(NULL, ",");
-    char* msg8 = strtok(NULL, ",");
-    char* msg9 = strtok(NULL, ",");
-    char* msg10 = strtok(NULL, ",");
-    char* msg11 = strtok(NULL, ",");
-    char* msg12 = strtok(NULL, ",");
-    char* msg13 = strtok(NULL, ",");
-    char* msg14 = strtok(NULL, ",");
-    char* msg15 = strtok(NULL, ",");
-    char* msg16 = strtok(NULL, ",");
+    char * morceau[16];
+    char * p;
+    int n=-1;
 
-    Serial.println(msg1);
-    Serial.println(msg2);
-    Serial.println(msg3);
-    Serial.println(msg4);
-    Serial.println(msg5);
-    Serial.println(msg6);
-    Serial.println(msg7);
-    Serial.println(msg8);
-    Serial.println(msg9);
-    Serial.println(msg10);
-    Serial.println(msg11);
-    Serial.println(msg12);
-    Serial.println(msg13);
-    Serial.println(msg14);
-    Serial.println(msg15);
-    Serial.println(msg16);
+    p = strtok(buf, ",");
+    while (p != NULL) {
+        morceau[++n] = p;
+        p = strtok(NULL, ",");
+    }
+    Serial.println(morceau[0]);
+    //for (n=0; n<16; n++)
+        //Serial.println(morceau[n]);
 }
 
 bool GPS::buffer_Synchro_GPS(char* result[]) {

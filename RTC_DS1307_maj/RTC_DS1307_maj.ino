@@ -9,6 +9,7 @@ const char* nommois[12] = {"Janvier","Février","Mars","Avril","Mai","Juin","Jui
 
 DS1307 clock;
 GPS donnees_GPS;
+Calendrier Cal;
 
 ISR (TIMER1_OVF_vect) //FCT INTERRUPTION
 { noInterrupts();
@@ -57,14 +58,21 @@ void setup() {
     date_horloge.annee          = 20;*/
     donnees_GPS.Parser(donnees_GPS.buffer);
     //Serial.print(donnees_GPS.results[1]);
-    clock.initialiser_horloge(donnees_GPS.results);
+    Cal.Extract_date_heure_from_GPS(donnees_GPS.results[1],donnees_GPS.results[9]);
+    Cal.init_fuseaux();
+    Cal.Correction_Heure_Date(Cal.UTC,Cal.fuseaux,0);
+    clock.setDate(Cal.UTC);
+    Cal.UTC=clock.getDate(Cal.UTC);
+    Cal.locale=Cal.Correction_Heure_Date(Cal.UTC,Cal.fuseaux,0);
+    clock.setDate(Cal.locale);
   
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  clock.getDate();
-  clock.printTime();
+  Cal.locale=clock.getDate(Cal.locale);
+  
+  clock.printTime(Cal.locale);
   delay(1000);
 
 }
