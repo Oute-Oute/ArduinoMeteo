@@ -21,17 +21,41 @@
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-// Définir l'objet tft pour l'écran TFT
+// Dï¿½finir l'objet tft pour l'ï¿½cran TFT
 Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 
 class Affichage {
 private : 
-	void TFT_Affiche_Date();
-	void TFT_Affiche_Heure();
-	void TFT_Affiche_Indicateur_Ete_Hiver();
-	void TFT_Affiche_ville_ref_fuseau_horaire();
-	void TFT_Affiche_Etat_Synchro_GPS();
+	int prevIndic;
+	char[20] prevCity;
+	float prevTemp;
+	float prevPres;
+	float prevHum;
+	float prevQual;
+	uint8_t prevAcc;
+
+	void TFT_Affiche_Date(curDate, prevDate);
+	void TFT_Affiche_Heure(curHour, prevHour);
+	void TFT_Affiche_Indicateur_Ete_Hiver(int curIndic, int prevIndic);
+	void TFT_Affiche_ville_ref_fuseau_horaire(char[20] curCity, char[20] prevCity);
+	void TFT_Affiche_Etat_Synchro_GPS(bool syncState);
+
+	void TFT_Affiche_Temperature(float curTemp, float prevTemp);
+	void TFT_Affiche_Pression(float curPres, float prevPres);
+	void TFT_Affiche_Humidite(float curHum, float prevHum);
+	void TFT_Affiche_Qualite_Air(float curQual, float prevQual);
+	void TFT_Affiche_Precision_Qualite_Air(uint8_t curAcc, uint8_t prevAcc);
+
 
 public :
-	void TFT_affichage();
+	void TFT_affichage(	curDate, prevDate,
+						curHour, prevHour,
+						int curIndic, int prevIndic,
+						char[20] curCity, char[20] prevCity,
+						bool syncState,
+						float curTemp, float prevTemp,
+						float curPres, float prevPres,
+						float curHum, float prevHum,
+						float curQual, float prevQual,
+						uint8_t curAcc, uint8_t prevAcc		);
 };
