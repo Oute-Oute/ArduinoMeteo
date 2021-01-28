@@ -27,8 +27,8 @@ const char* nom_mois[12] = {"Janvier","Février","Mars","Avril","Mai","Juin","Ju
     };
     
     struct fuseau{
-        //char* pays[25];
-        //char* villes[25];
+        char pays[25];
+        char villes[25];
         heure_RTC decalage_horaire;
     };
     horloge locale;

@@ -29,7 +29,7 @@ unsigned char* GPS::GetGPS_msg(void)
 char** GPS::Parser(unsigned char buf[100])
 {
 results[0]="$GPRMC";
-results[1]="115956.000";
+results[1]="111456.000";
 results[2]="A";
 results[3]="4721.8924";
 results[4]="N";
@@ -37,7 +37,7 @@ results[5]="00041.1105";
 results[6]="E";
 results[7]="0.42";
 results[8]="318.99";
-results[9]="300420";
+results[9]="311220";
 results[10]="";
 results[11]="";
 results[12]="";
