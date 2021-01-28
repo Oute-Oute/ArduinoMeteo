@@ -2,7 +2,13 @@
 #include "GPS.h"
 #include <Wire.h>
 #define BASE_TEMPS_TIMER1_1S 49911U
-int time_decrement=20000; //4H=14400s, 6H=21600s
+#define BASE_TEMPS_TIMER1_05S 57723U
+#define T_RH 1 // Période de gestion de l'événémént 1
+#define T_MAJH 40000 //4H=28800s, 6H=43200s donc environ 5h
+#define TCNT3_TIMER3 61630U // Période entre 2 IT Timer3 sur Overflow registre de comptage (environ 0.25s)
+
+volatile int T_Time_Out_Recuperation_Heure = 0;
+volatile int T_Time_Out_MAJ_Heure = 0;
 
 const char* joursemaine[7] = {"Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"};
 const char* nommois[12] = {"Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"};
@@ -12,19 +18,15 @@ GPS donnees_GPS;
 Calendrier Cal;
 
 ISR (TIMER1_OVF_vect) //FCT INTERRUPTION
-{ noInterrupts();
+{
+noInterrupts();
  /* PUSH Rn
   LDS Rn, SREG
   PUSH Rn*/
-  //TRAITEMENT IT
-  if (time_decrement<0){
-    Serial.println("Maj_heure_requise");}
-  else{
-    //Serial.println("OKLM");
-    time_decrement--;
-  }
-
-  //FIN TRAITEMENT IT
+  //TRAITEMENT LED 
+  T_Time_Out_Recuperation_Heure--;
+  T_Time_Out_MAJ_Heure;
+  //FIN TRAITEMENT LED
   /*POP Rn
   STS SREG, Rn
   POP Rn*/
@@ -33,14 +35,14 @@ ISR (TIMER1_OVF_vect) //FCT INTERRUPTION
 
 void setup() {
   // put your setup code here, to run once:
-    //IT GESTION
+  //IT GESTION
   noInterrupts();
   TCCR1A = 0b00000000;  //Mode Normal
   TCCR1B = 0b00000000;  //Timer1 arreté
   TCCR1C = 0b00000000; 
   TIFR1 |= 0b00000001;  //Mise a 1 bit TOV1
   TIMSK1 |= 0b00000001; //Mise a 1 bit TOEI1 
-  TCNT1=BASE_TEMPS_TIMER1_1S;
+  TCNT1=BASE_TEMPS_TIMER1_05S;
   interrupts();
   TCCR1B=0b00000100; //PRESCALE=1024
   //FIN IT GESTION
@@ -70,9 +72,16 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Cal.locale=clock.getDate(Cal.locale);
-  
-  clock.printTime(Cal.locale);
-  delay(1000);
+  if (T_Time_Out_Recuperation_Heure <= 0)
+  {
+    Cal.locale=clock.getDate(Cal.locale);
+    clock.printTime(Cal.locale);
+    T_Time_Out_Recuperation_Heure = T_RH;
+  }
 
+//  if (T_Time_Out_Evenement2 <= 0)
+//  {
+//    Tache2 ();
+//    T_Time_Out_Evenement2 = T_EVNT2;
+//  }
 }
