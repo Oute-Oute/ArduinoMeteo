@@ -1,12 +1,16 @@
 #include "Affichage.h"
 
 // D�finir l'objet tft pour l'�cran TFT
-Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
+/*#define LCD_CS A3 
+#define LCD_CD A2
+#define LCD_WR A1
+#define LCD_RD A0
+Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);*/
 
-void Affichage::TFT_affichage(	curDate, prevDate,
-						        curhour, prevHour,
+void Affichage::TFT_affichage(	Calendrier::date_RTC curDate, Calendrier::date_RTC prevDate,
+						        Calendrier::heure_RTC curHour, Calendrier::heure_RTC prevHour,
 						        int curIndic, int prevIndic,
-						        char[20] curCity, char[20] prevCity,
+						        char* curCity, char* prevCity,
 						        bool syncState,
 						        float curTemp, float prevTemp,
 						        float curPres, float prevPres,
@@ -14,50 +18,72 @@ void Affichage::TFT_affichage(	curDate, prevDate,
 						        float curQual, float prevQual,
 						        uint8_t curAcc, uint8_t prevAcc		)
 {
+    /*
+    à initialiser dans le .ino
+    
+    tft.fillScreen(WHITE);
+    tft.setCursor(0, 0);
+    tft.setTextColor(BLACK);  
+    tft.setTextSize(2);*/
+
 	TFT_Affiche_Date(curDate, prevDate);
 	TFT_Affiche_Heure(curHour, prevHour);
-	TFT_Affiche_Indicateur_Ete_Hiver(int curIndic, int prevIndic);
-	TFT_Affiche_ville_ref_fuseau_horaire(char[20] curCity, char[20] prevCity);
-	TFT_Affiche_Etat_Synchro_GPS(bool syncState);
+	TFT_Affiche_Indicateur_Ete_Hiver(curIndic, prevIndic);
+	TFT_Affiche_ville_ref_fuseau_horaire(curCity, prevCity);
+	TFT_Affiche_Etat_Synchro_GPS(syncState);
 
-	TFT_Affiche_Temperature(float curTemp, float prevTemp);
-	TFT_Affiche_Pression(float curPres, float prevPres);
-	TFT_Affiche_Humidite(float curHum, float prevHum);
-	TFT_Affiche_Qualite_Air(float curQual, float prevQual);
-	TFT_Affiche_Precision_Qualite_Air(uint8_t curAcc, uint8_t prevAcc);
+	TFT_Affiche_Temperature(curTemp, prevTemp);
+	TFT_Affiche_Pression(curPres, prevPres);
+	TFT_Affiche_Humidite(curHum, prevHum);
+	TFT_Affiche_Qualite_Air(curQual, prevQual);
+	TFT_Affiche_Precision_Qualite_Air(curAcc, prevAcc);
 }
 
-void Affichage::TFT_Affiche_Date(curDate, prevDate)
+void Affichage::TFT_Affiche_Date(Calendrier::date_RTC curDate, Calendrier::date_RTC prevDate)
 {
-
+    if(curDate.jour != prevDate.jour)
+    {
+        tft.setTextColor(WHITE);
+        tft.print(prevDate.jour);
+        tft.setTextColor(BLACK);
+        tft.println(curDate.jour);
+        prevDate = curDate;
+    }
 }
 
-void Affichage::TFT_Affiche_Heure(curHour, prevHour)
+void Affichage::TFT_Affiche_Heure(Calendrier::heure_RTC curHour, Calendrier::heure_RTC prevHour)
 {
-
+    if(curHour.seconde != prevHour.seconde)
+    {
+        tft.setTextColor(WHITE);
+        tft.print(prevHour.heure);
+        tft.setTextColor(BLACK);
+        tft.println(curHour.heure);
+        prevHour = curHour;
+    }
 }
 
 void Affichage::TFT_Affiche_Indicateur_Ete_Hiver(int curIndic, int prevIndic)
 {
     if(curIndic != prevIndic)
     {
-        tft.setTextColor(WHITE)
+        tft.setTextColor(WHITE);
         tft.print(prevIndic);
-        tft.setTextColor(BLACK)
+        tft.setTextColor(BLACK);
         tft.println(curIndic);
         prevIndic = curIndic;
     }
 }
 
-void Affichage::TFT_Affiche_ville_ref_fuseau_horaire(char[20] curCity, char[20] prevCity)
+void Affichage::TFT_Affiche_ville_ref_fuseau_horaire(char* curCity, char* prevCity)
 {
-    if(curCity != prevCity)
+    if(*curCity != *prevCity)
     {
-        tft.setTextColor(WHITE)
-        tft.print(prevCity);
-        tft.setTextColor(BLACK)
-        tft.println(curCity);
-        prevCity = curCity;
+        tft.setTextColor(WHITE);
+        tft.print(*prevCity);
+        tft.setTextColor(BLACK);
+        tft.println(*curCity);
+        *prevCity = *curCity;
     }
 }
 
@@ -74,9 +100,9 @@ void Affichage::TFT_Affiche_Temperature(float curTemp, float prevTemp)
 {
     if(curTemp != prevTemp)
     {
-        tft.setTextColor(WHITE)
+        tft.setTextColor(WHITE);
         tft.print(prevTemp);
-        tft.setTextColor(BLACK)
+        tft.setTextColor(BLACK);
         tft.println(curTemp);
         prevTemp = curTemp;
     }
@@ -84,13 +110,13 @@ void Affichage::TFT_Affiche_Temperature(float curTemp, float prevTemp)
 
 void Affichage::TFT_Affiche_Pression(float curPres, float prevPres)
 {
-    if(curPres != prevPress)
+    if(curPres != prevPres)
     {
-        tft.setTextColor(WHITE)
-        tft.print(prevPress);
-        tft.setTextColor(BLACK)
-        tft.println(curPress);
-        prevPress = curPres;
+        tft.setTextColor(WHITE);
+        tft.print(prevPres);
+        tft.setTextColor(BLACK);
+        tft.println(curPres);
+        prevPres = curPres;
     }
 }
 
@@ -98,9 +124,9 @@ void Affichage::TFT_Affiche_Humidite(float curHum, float prevHum)
 {
     if(curHum != prevHum)
     {
-        tft.setTextColor(WHITE)
+        tft.setTextColor(WHITE);
         tft.print(prevHum);
-        tft.setTextColor(BLACK)
+        tft.setTextColor(BLACK);
         tft.println(curHum);
         prevHum = curHum;
     }
@@ -110,9 +136,9 @@ void Affichage::TFT_Affiche_Qualite_Air(float curQual, float prevQual)
 {
     if(curQual != prevQual)
     {
-        tft.setTextColor(WHITE)
+        tft.setTextColor(WHITE);
         tft.print(prevQual);
-        tft.setTextColor(BLACK)
+        tft.setTextColor(BLACK);
         tft.println(curQual);
         prevQual = curQual;
     }
@@ -122,9 +148,9 @@ void Affichage::TFT_Affiche_Precision_Qualite_Air(uint8_t curAcc, uint8_t prevAc
 {
     if(curAcc != prevAcc)
     {
-        tft.setTextColor(WHITE)
+        tft.setTextColor(WHITE);
         tft.print(prevAcc);
-        tft.setTextColor(BLACK)
+        tft.setTextColor(BLACK);
         tft.println(curAcc);
         prevAcc = curAcc;
     }

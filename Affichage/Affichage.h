@@ -1,6 +1,6 @@
-#include "RTC_DS1307.h"
+#include "Calendrier.h"
 #include "bsec.h"
-#include "TFT_Affichage.h"
+//#include "TFT_Affichage.h"
 #include <Adafruit_GFX.h>
 #include <Adafruit_TFTLCD.h>
 
@@ -26,18 +26,20 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 
 class Affichage {
 private : 
+	Calendrier::date_RTC prevDate;
+	Calendrier::heure_RTC prevHour;
 	int prevIndic;
-	char[20] prevCity;
+	char* prevCity;
 	float prevTemp;
 	float prevPres;
 	float prevHum;
 	float prevQual;
 	uint8_t prevAcc;
 
-	void TFT_Affiche_Date(curDate, prevDate);
-	void TFT_Affiche_Heure(curHour, prevHour);
+	void TFT_Affiche_Date(Calendrier::date_RTC curDate, Calendrier::date_RTC prevDate);
+	void TFT_Affiche_Heure(Calendrier::heure_RTC curHour, Calendrier::heure_RTC prevHour);
 	void TFT_Affiche_Indicateur_Ete_Hiver(int curIndic, int prevIndic);
-	void TFT_Affiche_ville_ref_fuseau_horaire(char[20] curCity, char[20] prevCity);
+	void TFT_Affiche_ville_ref_fuseau_horaire(char* curCity, char* prevCity);
 	void TFT_Affiche_Etat_Synchro_GPS(bool syncState);
 
 	void TFT_Affiche_Temperature(float curTemp, float prevTemp);
@@ -48,10 +50,10 @@ private :
 
 
 public :
-	void TFT_affichage(	curDate, prevDate,
-						curHour, prevHour,
+	void TFT_affichage(	Calendrier::date_RTC curDate, Calendrier::date_RTC prevDate,
+						Calendrier::heure_RTC curHour, Calendrier::heure_RTC prevHour,
 						int curIndic, int prevIndic,
-						char[20] curCity, char[20] prevCity,
+						char* curCity, char* prevCity,
 						bool syncState,
 						float curTemp, float prevTemp,
 						float curPres, float prevPres,
