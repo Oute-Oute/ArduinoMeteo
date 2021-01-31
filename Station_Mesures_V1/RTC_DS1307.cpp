@@ -46,11 +46,11 @@ void DS1307::setDate(Calendrier::horloge horloge) {
 }
 
 
-int DS1307::jourSemaine(Calendrier::horloge horloge) {
-  int c = (14 - horloge.date.nbr_mois) / 12;
-  int a = (horloge.date.annee + 2000) - c;
-  int m = horloge.date.nbr_mois + (12 * c) - 2;
-  return (horloge.date.jour + a + (a / 4) - (a / 100) + (a / 400) + (31 * m) / 12) % 7;
+int DS1307::jourSemaine(Calendrier::date_RTC date) {
+  int c = (14 - date.nbr_mois) / 12;
+  int a = (date.annee + 2000) - c;
+  int m = date.nbr_mois + (12 * c) - 2;
+  return (date.jour + a + (a / 4) - (a / 100) + (a / 400) + (31 * m) / 12) % 7;
 }
 
 void DS1307::printTime(Calendrier::horloge horloge) {
