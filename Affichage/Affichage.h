@@ -1,10 +1,12 @@
-#include "Calendrier.h"
 #include "bsec.h"
+#include "GPS.h"
+#include "RTC_DS1307.h"
 //#include "TFT_Affichage.h"
 #include <Adafruit_GFX.h>
 #include <Adafruit_TFTLCD.h>
 
-#define LCD_CS A3 
+// D�finir l'objet tft pour l'�cran TFT
+#define LCD_CS A3
 #define LCD_CD A2
 #define LCD_WR A1
 #define LCD_RD A0
@@ -21,43 +23,47 @@
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-// D�finir l'objet tft pour l'�cran TFT
-Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
-
 class Affichage {
-private : 
-	Calendrier::date_RTC prevDate;
-	Calendrier::heure_RTC prevHour;
-	int prevIndic;
-	char* prevCity;
-	float prevTemp;
-	float prevPres;
-	float prevHum;
-	float prevQual;
-	uint8_t prevAcc;
+  private :
 
-	void TFT_Affiche_Date(Calendrier::date_RTC curDate, Calendrier::date_RTC prevDate);
-	void TFT_Affiche_Heure(Calendrier::heure_RTC curHour, Calendrier::heure_RTC prevHour);
-	void TFT_Affiche_Indicateur_Ete_Hiver(int curIndic, int prevIndic);
-	void TFT_Affiche_ville_ref_fuseau_horaire(char* curCity, char* prevCity);
-	void TFT_Affiche_Etat_Synchro_GPS(bool syncState);
+    void TFT_Affiche_Date(Calendrier::date_RTC curDate, Calendrier::date_RTC prevDate);
+    void TFT_Affiche_Heure(Calendrier::heure_RTC curHour, Calendrier::heure_RTC prevHour);
+    void TFT_Affiche_Indicateur_Ete_Hiver(int curIndic, int prevIndic);
+    void TFT_Affiche_ville_ref_fuseau_horaire(char* curCity, char* prevCity);
+    void TFT_Affiche_Etat_Synchro_GPS(bool syncState);
 
-	void TFT_Affiche_Temperature(float curTemp, float prevTemp);
-	void TFT_Affiche_Pression(float curPres, float prevPres);
-	void TFT_Affiche_Humidite(float curHum, float prevHum);
-	void TFT_Affiche_Qualite_Air(float curQual, float prevQual);
-	void TFT_Affiche_Precision_Qualite_Air(uint8_t curAcc, uint8_t prevAcc);
+    void TFT_Affiche_Temperature(String curTemp, String prevTemp);
+    void TFT_Affiche_Pression(String curPres, String prevPres);
+    void TFT_Affiche_Humidite(String curHum, String prevHum);
+    void TFT_Affiche_Qualite_Air(String curQual, String prevQual);
+    void TFT_Affiche_Precision_Qualite_Air(String curAcc, String prevAcc);
 
 
-public :
-	void TFT_affichage(	Calendrier::date_RTC curDate, Calendrier::date_RTC prevDate,
-						Calendrier::heure_RTC curHour, Calendrier::heure_RTC prevHour,
-						int curIndic, int prevIndic,
-						char* curCity, char* prevCity,
-						bool syncState,
-						float curTemp, float prevTemp,
-						float curPres, float prevPres,
-						float curHum, float prevHum,
-						float curQual, float prevQual,
-						uint8_t curAcc, uint8_t prevAcc		);
+  public :
+
+    Calendrier::date_RTC prevDate; Calendrier::date_RTC curDate;
+    Calendrier::heure_RTC prevHour;   Calendrier::heure_RTC curHour;
+    int prevIndic; int curIndic;
+    char* prevCity; char* curCity;
+    bool syncState;
+    String prevTemp; String curTemp;
+    String prevPres; String curPres;
+    String prevHum; String curHum;
+    String prevQual; String curQual;
+    String prevAcc; String curAcc;
+
+    void TFT_setup(void);
+    void TFT_setCursor(int a, int b);
+    void TFT_println(String text);
+    void TFT_fillScreen(uint16_t color);
+    void TFT_affichage(	Calendrier::date_RTC curDate, Calendrier::date_RTC prevDate,
+                        Calendrier::heure_RTC curHour, Calendrier::heure_RTC prevHour,
+                        int curIndic, int prevIndic,
+                        char* curCity, char* prevCity,
+                        bool syncState,
+                        String curTemp, String prevTemp,
+                        String curPres, String prevPres,
+                        String curHum, String prevHum,
+                        String curQual, String prevQual,
+                        String curAcc, String prevAcc		);
 };

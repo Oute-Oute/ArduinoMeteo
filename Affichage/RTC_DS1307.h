@@ -12,12 +12,12 @@ class DS1307 {
     uint8_t bcdToDec(uint8_t val);
 
   public:
-   Calendrier::horloge test;
-      
+    Calendrier::horloge test;
+
     void setDate(Calendrier::horloge horloge);
     Calendrier::horloge  getDate(Calendrier::horloge horloge);
-	  int jourSemaine(Calendrier::horloge horloge);
-	  void printTime(Calendrier::horloge horloge);
+    int jourSemaine(Calendrier::horloge horloge);
+    void printTime(Calendrier::horloge horloge);
     uint8_t second;
     uint8_t minute;
     uint8_t hour;
