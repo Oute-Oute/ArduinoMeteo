@@ -80,11 +80,16 @@ void setup()
     ecran.prevAcc = sensor.iaqAccuracy;
   }
 
-  ecran.prevDate = Cal.locale.date;
+  ecran.prevDate.jour_semaine = Cal.locale.date.jour_semaine;
+  ecran.prevDate.jour = 32;//Cal.locale.date.jour;
+  ecran.prevDate.nbr_mois = Cal.locale.date.nbr_mois;
+  ecran.prevDate.annee = Cal.locale.date.annee;
+
+  Serial.print(ecran.prevDate.jour);
   ecran.prevHour = Cal.locale.heure;
   ecran.prevIndic = 3;
   ecran.prevCity = Cal.f1.villes;
-  ecran.syncState = donnees_GPS.buffer_Synchro_GPS(donnees_GPS.Parser(donnees_GPS.GetGPS_msg()));
+  ecran.syncState = donnees_GPS.buffer_Synchro_GPS(donnees_GPS.gprmc);
 
   ecran.TFT_affichage(   ecran.curDate, ecran.prevDate,
                          ecran.curHour, ecran.prevHour,
@@ -112,11 +117,15 @@ void loop()
       ecran.curAcc = sensor.iaqAccuracy;
     }
 
-    ecran.curDate = Cal.locale.date;
+    ecran.curDate.jour_semaine = Cal.locale.date.jour_semaine;
+    ecran.curDate.jour = Cal.locale.date.jour;
+    ecran.curDate.nbr_mois = Cal.locale.date.nbr_mois;
+    ecran.curDate.annee = Cal.locale.date.annee;
+    Serial.print(ecran.curDate.jour);
     ecran.curHour = Cal.locale.heure;
     ecran.curIndic = Cal.indicateur_ete_hiver;
     ecran.curCity = Cal.f1.villes;
-    ecran.syncState = donnees_GPS.buffer_Synchro_GPS(donnees_GPS.Parser(donnees_GPS.GetGPS_msg()));
+    ecran.syncState = donnees_GPS.buffer_Synchro_GPS(donnees_GPS.gprmc);
 
     //ecran.TFT_fillScreen(WHITE);
     ecran.TFT_setCursor(0, 0);

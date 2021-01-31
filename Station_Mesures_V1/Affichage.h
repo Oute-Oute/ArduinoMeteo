@@ -66,4 +66,6 @@ class Affichage {
                         String curHum, String prevHum,
                         String curQual, String prevQual,
                         String curAcc, String prevAcc		);
+
+    int jourSemaine(Calendrier::date_RTC date);
 };

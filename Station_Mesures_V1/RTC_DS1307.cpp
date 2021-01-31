@@ -53,7 +53,7 @@ int DS1307::jourSemaine(Calendrier::date_RTC date) {
   return (date.jour + a + (a / 4) - (a / 100) + (a / 400) + (31 * m) / 12) % 7;
 }
 
-void DS1307::printTime(Calendrier::horloge horloge) {
+/*void DS1307::printTime(Calendrier::horloge horloge) {
   const char* jour_semaine[7] = {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
   const char* nom_mois[12] = {"Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"};
   //Serial.println("test");
@@ -82,4 +82,4 @@ void DS1307::printTime(Calendrier::horloge horloge) {
   Serial.print(" ");
   Serial.print(2000 + horloge.date.annee);
   Serial.println(" ");
-}
+}*/

@@ -17,7 +17,7 @@ class DS1307 {
     void setDate(Calendrier::horloge horloge);
     Calendrier::horloge  getDate(Calendrier::horloge horloge);
     int jourSemaine(Calendrier::date_RTC date);
-    void printTime(Calendrier::horloge horloge);
+    //void printTime(Calendrier::horloge horloge);
     uint8_t second;
     uint8_t minute;
     uint8_t hour;

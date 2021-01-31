@@ -55,17 +55,21 @@ void Affichage::TFT_affichage(	Calendrier::date_RTC curDate, Calendrier::date_RT
 
 void Affichage::TFT_Affiche_Date(Calendrier::date_RTC curDate, Calendrier::date_RTC prevDate)
 {
+  const char* jour_semaine[7] = {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
+  const char* nom_mois[12] = {"Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"};
   if (curDate.jour != prevDate.jour)
   {
     tft.setTextColor(BLACK);
-    tft.print("Date : ");
+    //tft.print("Date : ");
     int x = tft.getCursorX();
     int y = tft.getCursorY();
     tft.setTextColor(WHITE);
-    tft.print(prevDate.jour);
+    int prevannee = 2000 + prevDate.annee;
+    tft.print(jour_semaine[jourSemaine(prevDate)]); tft.print(" "); tft.print(prevDate.jour); tft.print(" "); tft.print(nom_mois[prevDate.nbr_mois]); tft.print(" "); tft.print(prevannee); tft.println(" ");
     tft.setCursor(x, y);
     tft.setTextColor(BLACK);
-    tft.println(curDate.jour);
+    int curannee = 2000 + curDate.annee;
+    tft.print(jour_semaine[jourSemaine(curDate)]); tft.print(" "); tft.print(curDate.jour); tft.print(" "); tft.print(nom_mois[curDate.nbr_mois]); tft.print(" "); tft.print(curannee); tft.println(" ");
   }
   else {
     tft.println(" ");
@@ -97,8 +101,8 @@ void Affichage::TFT_Affiche_Indicateur_Ete_Hiver(int curIndic, int prevIndic)
     if (curIndic == 1) {
       saison = "Été";
     }
-    else saison ="Hiver";
-    
+    else saison = "Hiver";
+
     tft.setTextColor(BLACK);
     tft.print("Heure d'");
     int x = tft.getCursorX();
@@ -238,4 +242,11 @@ void Affichage::TFT_Affiche_Precision_Qualite_Air(String curAcc, String prevAcc)
   else {
     tft.println(" ");
   }
+}
+
+int Affichage::jourSemaine(Calendrier::date_RTC date) {
+  int c = (14 - date.nbr_mois) / 12;
+  int a = (date.annee + 2000) - c;
+  int m = date.nbr_mois + (12 * c) - 2;
+  return (date.jour + a + (a / 4) - (a / 100) + (a / 400) + (31 * m) / 12) % 7;
 }
