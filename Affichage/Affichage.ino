@@ -53,9 +53,21 @@ void setup()
 
   ecran.prevDate = Cal.locale.date;
   ecran.prevHour = Cal.locale.heure;
-  ecran.prevIndic = Cal.indicateur_ete_hiver;
+  ecran.prevIndic = 3;
   ecran.prevCity = Cal.f1.villes;
   ecran.syncState = donnees_GPS.buffer_Synchro_GPS(donnees_GPS.Parser(donnees_GPS.GetGPS_msg()));
+
+  ecran.TFT_affichage(   ecran.curDate, ecran.prevDate,
+                         ecran.curHour, ecran.prevHour,
+                         ecran.curIndic , ecran.prevIndic,
+                         ecran.curCity , ecran.prevCity,
+                         ecran.syncState,
+                         ecran.curTemp, ecran.prevTemp,
+                         ecran.curPres, ecran.prevPres,
+                         ecran.curHum, ecran.prevHum,
+                         ecran.curQual, ecran.prevQual,
+                         ecran.curAcc, ecran.prevAcc   );
+                         //delay(5000);
 
 }
 
@@ -78,6 +90,7 @@ void loop()
 
   //ecran.TFT_fillScreen(WHITE);
   ecran.TFT_setCursor(0, 0);
+  ecran.TFT_println(" ");
   ecran.TFT_affichage(   ecran.curDate, ecran.prevDate,
                          ecran.curHour, ecran.prevHour,
                          ecran.curIndic , ecran.prevIndic,
@@ -94,5 +107,9 @@ void loop()
   ecran.prevQual = ecran.curQual;
   ecran.prevAcc = ecran.curAcc;
   *ecran.prevCity = *ecran.curCity;
+  ecran.prevDate = ecran.curDate;
+  ecran.prevHour = ecran.curHour;
+  ecran.prevIndic = ecran.curIndic;
 
+//delay(5000);
 }

@@ -7,7 +7,7 @@ class Calendrier  {
   public :
     const char* jour_semaine[7] = {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
     const char* nom_mois[12] = {"Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"};
-    int indicateur_ete_hiver = 1;
+    int indicateur_ete_hiver = 0;
 
     struct date_RTC {
       uint8_t jour_semaine;

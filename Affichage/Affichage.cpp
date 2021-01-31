@@ -57,6 +57,8 @@ void Affichage::TFT_Affiche_Date(Calendrier::date_RTC curDate, Calendrier::date_
 {
   if (curDate.jour != prevDate.jour)
   {
+    tft.setTextColor(BLACK);
+    tft.print("Date : ");
     int x = tft.getCursorX();
     int y = tft.getCursorY();
     tft.setTextColor(WHITE);
@@ -64,7 +66,6 @@ void Affichage::TFT_Affiche_Date(Calendrier::date_RTC curDate, Calendrier::date_
     tft.setCursor(x, y);
     tft.setTextColor(BLACK);
     tft.println(curDate.jour);
-    prevDate = curDate;
   }
   else {
     tft.println(" ");
@@ -82,7 +83,6 @@ void Affichage::TFT_Affiche_Heure(Calendrier::heure_RTC curHour, Calendrier::heu
     tft.setCursor(x, y);
     tft.setTextColor(BLACK);
     tft.println(curHour.heure);
-    prevHour = curHour;
   }
   else {
     tft.println(" ");
@@ -93,16 +93,22 @@ void Affichage::TFT_Affiche_Indicateur_Ete_Hiver(int curIndic, int prevIndic)
 {
   if (curIndic != prevIndic)
   {
+    String saison;
+    if (curIndic == 1) {
+      saison = "Été";
+    }
+    else saison ="Hiver";
+    
     tft.setTextColor(BLACK);
     tft.print("Heure d'");
     int x = tft.getCursorX();
     int y = tft.getCursorY();
     tft.setTextColor(WHITE);
-    tft.print(prevIndic);
+    tft.print(saison);
     tft.setCursor(x, y);
     tft.setTextColor(BLACK);
-    tft.println(curIndic);
-    prevIndic = curIndic;
+    tft.println(saison);
+
   }
   else {
     tft.println(" ");
