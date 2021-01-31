@@ -1,6 +1,7 @@
 #include "RTC_DS1307.h"
 #include "GPS.h"
 #include <Wire.h>
+#include "bsec.h"
 #define BASE_TEMPS_TIMER1_1S 49911U
 #define BASE_TEMPS_TIMER1_05S 57723U
 #define T_RH 1 // Période de gestion de l'événémént 1
@@ -20,6 +21,7 @@ DS1307 clock;
 GPS donnees_GPS;
 Calendrier Cal;
 Bsec sensor;
+String output;
 
 ISR (TIMER1_OVF_vect) //FCT INTERRUPTION
 {
@@ -30,6 +32,7 @@ ISR (TIMER1_OVF_vect) //FCT INTERRUPTION
   //TRAITEMENT LED
   T_Time_Out_Recuperation_Heure--;
   T_Time_Out_MAJ_Heure--;
+  T_Time_Out_MAJ_BSEC--;
   //FIN TRAITEMENT LED
   /*POP Rn
     STS SREG, Rn
@@ -74,13 +77,13 @@ void setup() {
 
   sensor.updateSubscription(sensorList, 10, BSEC_SAMPLE_RATE_LP);
   
-  if (sensor.run()) {
+  /*if (sensor.run()) {
     ecran.prevTemp = sensor.rawTemperature;
     ecran.prevPres = sensor.pressure;
     ecran.prevHum = sensor.humidity;
     ecran.prevQual = sensor.iaq;
     ecran.prevAcc = sensor.iaqAccuracy;
-  }
+  }*/
 
 
   /*heure_horloge.seconde  = 1;
@@ -153,16 +156,18 @@ void loop() {
   if (T_Time_Out_MAJ_BSEC <= 0)
   {
   if (sensor.run()) { // If new data is available
-    output += ", " + String(sensor.rawTemperature);
-    output += ", " + String(sensor.pressure);
-    output += ", " + String(sensor.rawHumidity);
-    output += ", " + String(sensor.gasResistance);
+    output += ", température: " + String(sensor.rawTemperature);
+    output += ", pression: " + String(sensor.pressure);
+    output += ", humidité: " + String(sensor.rawHumidity);
+    //output += ", " + String(sensor.gasResistance);
     output += ", " + String(sensor.iaq);
     output += ", " + String(sensor.iaqAccuracy);
-    output += ", " + String(sensor.temperature);
-    output += ", " + String(sensor.humidity);
-    output += ", " + String(sensor.staticIaq);
-    output += ", " + String(sensor.co2Equivalent);
-    output += ", " + String(sensor.breathVocEquivalent);
+    //output += ", " + String(sensor.temperature);
+    //output += ", " + String(sensor.humidity);
+    //output += ", " + String(sensor.staticIaq);
+    output += ", CO2: " + String(sensor.co2Equivalent);
+    output += ", COV: " + String(sensor.breathVocEquivalent);
     Serial.println(output);
-}
+    T_Time_Out_MAJ_BSEC = 3;
+    output = " ";
+  }}}

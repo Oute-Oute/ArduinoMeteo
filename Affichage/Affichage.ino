@@ -101,6 +101,7 @@ void loop()
                          ecran.curHum, ecran.prevHum,
                          ecran.curQual, ecran.prevQual,
                          ecran.curAcc, ecran.prevAcc   );
+                         
   ecran.prevTemp = ecran.curTemp;
   ecran.prevPres = ecran.curPres;
   ecran.prevHum = ecran.curHum;
