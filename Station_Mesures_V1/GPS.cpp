@@ -1,6 +1,6 @@
 #include "GPS.h"
 
-unsigned char buffer[100];                   // bufferfer array for data receive over serial port
+// bufferfer array for data receive over serial port
 int count = 0;
 
 void GPS::clearBufferArray(void)
@@ -11,8 +11,7 @@ void GPS::clearBufferArray(void)
   }
 }
 
-unsigned char* GPS::GetGPS_msg(void)
-{
+char *GPS::GetGPS_msg(void) {
 
   if (Serial1.available())
   {
@@ -26,35 +25,83 @@ unsigned char* GPS::GetGPS_msg(void)
   return buffer;
 }
 
-char** GPS::Parser(unsigned char buf[100])
+void GPS::Parser(char* buf)
 {
-  results[0] = "$GPRMC";
-  results[1] = "111456.000";
-  results[2] = "A";
-  results[3] = "4721.8924";
-  results[4] = "N";
-  results[5] = "00041.1105";
-  results[6] = "E";
-  results[7] = "0.42";
-  results[8] = "318.99";
-  results[9] = "311220";
-  results[10] = "";
-  results[11] = "";
-  results[12] = "";
-  results[13] = "D*68";
-  results[14] = "";
-  results[15] = "";
-  return results;
+  if (buffer[1] == 'G') {
+    /*char * morceau[16];
+      char * p;
+      int n=-1;
+
+      p = strtok(buf, ",");
+      while (p != NULL) {
+        morceau[++n] = p;
+        p = strtok(NULL, ",");
+      }
+      Serial.println(morceau[0]);
+      //for (n=0; n<16; n++)
+      //Serial.println(morceau[n]);*/
+    gprmc.type = strtok(buf, ",");
+    //Serial.println(gprmc.type);
+    gprmc.heure = strtok(NULL, ",");
+    //Serial.println(gprmc.heure);
+    gprmc.valide = strtok(NULL, ",");
+    //Serial.println(gprmc.valide);
+    gprmc.latitude = strtok(NULL, ",");
+    //Serial.println(gprmc.latitude);
+    gprmc.nord_sud = strtok(NULL, ",");
+    //Serial.println(gprmc.nord_sud);
+    gprmc.longitude = strtok(NULL, ",");
+    //Serial.println(gprmc.longitude);
+    gprmc.est_ouest = strtok(NULL, ",");
+    //Serial.println(gprmc.est_ouest);
+    gprmc.speed_ground = strtok(NULL, ",");
+    //Serial.println(gprmc.speed_ground);
+    gprmc.corse_ground = strtok(NULL, ",");
+    //Serial.println(gprmc.corse_ground);
+    gprmc.date = strtok(NULL, ",");
+    //Serial.println(gprmc.date);
+    gprmc.magnetic = strtok(NULL, ",");
+    //Serial.println(gprmc.magnetic);
+    gprmc.est_ouest_indicator = strtok(NULL, ",");
+    //Serial.println(gprmc.est_ouest_indicator);
+    gprmc.mode = strtok(NULL, ",");
+    //Serial.println(gprmc.mode);
+    gprmc.cheksum = strtok(NULL, ",");
+    //Serial.println(gprmc.cheksum);
+    gprmc.fin_msg = strtok(NULL, ",");
+    //Serial.println(gprmc.fin_msg);
+
+  }
+  /*gprmc.type="$GPRMC";
+    gprmc.heure="111456.000";
+    gprmc.valide="A";
+    gprmc.latitude="4721.8924";
+    gprmc.nord_sud="N";
+    gprmc.longitude="00041.1105";
+    gprmc.est_ouest="E";
+    gprmc.speed_ground="0.42";
+    gprmc.corse_ground="318.99";
+    gprmc.date="311220";
+    gprmc.magnetic="";
+    gprmc.est_ouest_indicator="";
+    gprmc.mode="";
+    gprmc.cheksum="D*68";
+    gprmc.fin_msg="";
+    //return results;*/
 
 }
 
-bool GPS::buffer_Synchro_GPS(char* result[]) {
-  if (result[0] == "$GPRMC") {
-    if (result[2] == "A")return true;
-    else return false;
+bool GPS::buffer_Synchro_GPS(GPS::TYPE_GPRMC) {
+  if (strcmp(gprmc.type, "$GPRMC")) {
+    if (gprmc.valide=='A') {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
-  if (result[0] == "$GPGGA") {
-    if (result[6] == "0")return false;
+  if (strcmp(gprmc.type, "$GPGGA")) {
+    if (gprmc.valide == "0")return false;
     else return true;
   }
 }
