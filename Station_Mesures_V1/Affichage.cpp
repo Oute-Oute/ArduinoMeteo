@@ -12,7 +12,8 @@ void Affichage::TFT_setup(void)
   tft.setCursor(0, 0);
   tft.setTextColor(BLACK);
   tft.setTextSize(2);
-  tft.println("It's alive !");
+  tft.println("Station Meteo Arduino");
+  tft.println(" ");
 }
 
 void Affichage::TFT_fillScreen(uint16_t color)
@@ -60,10 +61,11 @@ void Affichage::TFT_Affiche_Date(Calendrier::date_RTC curDate, Calendrier::date_
   if (curDate.jour != prevDate.jour)
   {
     tft.setTextColor(BLACK);
-    //tft.print("Date : ");
     int x = tft.getCursorX();
     int y = tft.getCursorY();
     tft.setTextColor(WHITE);
+    tft.print("Mardi 0 Janvier 2000");
+    tft.setCursor(x, y);
     int prevannee = 2000 + prevDate.annee;
     tft.print(jour_semaine[jourSemaine(prevDate)]); tft.print(" "); tft.print(prevDate.jour); tft.print(" "); tft.print(nom_mois[prevDate.nbr_mois]); tft.print(" "); tft.print(prevannee); tft.println(" ");
     tft.setCursor(x, y);
@@ -83,10 +85,24 @@ void Affichage::TFT_Affiche_Heure(Calendrier::heure_RTC curHour, Calendrier::heu
     int x = tft.getCursorX();
     int y = tft.getCursorY();
     tft.setTextColor(WHITE);
-    tft.print(prevHour.heure);
+    tft.print("00:00 00");
+    tft.setCursor(x, y);
+    if (prevHour.heure < 10) {
+      tft.print("0");
+    } tft.print(prevHour.heure); tft.print(":"); if (prevHour.minute < 10) {
+      tft.print("0");
+    } tft.print(prevHour.minute); tft.print(" "); if (prevHour.seconde < 10) {
+      tft.print("0");
+    } tft.println(prevHour.seconde);
     tft.setCursor(x, y);
     tft.setTextColor(BLACK);
-    tft.println(curHour.heure);
+    if (curHour.heure < 10) {
+      tft.print("0");
+    } tft.print(curHour.heure); tft.print(":"); if (curHour.minute < 10) {
+      tft.print("0");
+    } tft.print(curHour.minute); tft.print(" "); if (curHour.seconde < 10) {
+      tft.print("0");
+    } tft.println(curHour.seconde);
   }
   else {
     tft.println(" ");
@@ -121,17 +137,17 @@ void Affichage::TFT_Affiche_Indicateur_Ete_Hiver(int curIndic, int prevIndic)
 
 void Affichage::TFT_Affiche_ville_ref_fuseau_horaire(char* curCity, char* prevCity)
 {
-  if (*curCity != *prevCity)
+  if (curCity != prevCity)
   {
     tft.setTextColor(BLACK);
     tft.print("Heure de ");
     int x = tft.getCursorX();
     int y = tft.getCursorY();
     tft.setTextColor(WHITE);
-    tft.print(*prevCity);
+    tft.print(prevCity);
     tft.setCursor(x, y);
     tft.setTextColor(BLACK);
-    tft.println(*curCity);
+    tft.println(curCity);
   }
   else {
     tft.println(" ");

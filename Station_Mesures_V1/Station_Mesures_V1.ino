@@ -46,7 +46,6 @@ void setup()
   Serial.begin(9600);
   Wire.begin();
   sensor.begin(BME680_I2C_ADDR_PRIMARY, Wire);
-  //checksensorStatus();
 
   bsec_virtual_sensor_t sensorList[10] = {
     BSEC_OUTPUT_RAW_TEMPERATURE,
@@ -80,15 +79,15 @@ void setup()
     ecran.prevAcc = sensor.iaqAccuracy;
   }
 
-  ecran.prevDate.jour_semaine = Cal.locale.date.jour_semaine;
-  ecran.prevDate.jour = 32;//Cal.locale.date.jour;
+  ecran.prevDate.jour_semaine = 0 ;//Cal.locale.date.jour_semaine;
+  ecran.prevDate.jour = Cal.locale.date.jour;
   ecran.prevDate.nbr_mois = Cal.locale.date.nbr_mois;
   ecran.prevDate.annee = Cal.locale.date.annee;
 
   Serial.print(ecran.prevDate.jour);
   ecran.prevHour = Cal.locale.heure;
   ecran.prevIndic = 3;
-  ecran.prevCity = Cal.f1.villes;
+  ecran.prevCity = "villes";
   ecran.syncState = donnees_GPS.buffer_Synchro_GPS(donnees_GPS.gprmc);
 
   ecran.TFT_affichage(   ecran.curDate, ecran.prevDate,
@@ -101,7 +100,6 @@ void setup()
                          ecran.curHum, ecran.prevHum,
                          ecran.curQual, ecran.prevQual,
                          ecran.curAcc, ecran.prevAcc   );
-  //delay(5000);
 
 }
 
@@ -109,6 +107,7 @@ void loop()
 {
   if (T_Time_Out_Recuperation_Heure <= 0)
   {
+    Cal.locale = clock.getDate(Cal.locale);
     if (sensor.run()) {
       ecran.curTemp = sensor.rawTemperature;
       ecran.curPres = sensor.pressure;
@@ -124,11 +123,11 @@ void loop()
     Serial.print(ecran.curDate.jour);
     ecran.curHour = Cal.locale.heure;
     ecran.curIndic = Cal.indicateur_ete_hiver;
-    ecran.curCity = Cal.f1.villes;
+    ecran.curCity = Cal.f16.villes;
     ecran.syncState = donnees_GPS.buffer_Synchro_GPS(donnees_GPS.gprmc);
 
-    //ecran.TFT_fillScreen(WHITE);
     ecran.TFT_setCursor(0, 0);
+    ecran.TFT_println(" ");
     ecran.TFT_println(" ");
     ecran.TFT_affichage(   ecran.curDate, ecran.prevDate,
                            ecran.curHour, ecran.prevHour,
@@ -140,12 +139,13 @@ void loop()
                            ecran.curHum, ecran.prevHum,
                            ecran.curQual, ecran.prevQual,
                            ecran.curAcc, ecran.prevAcc   );
+
     ecran.prevTemp = ecran.curTemp;
     ecran.prevPres = ecran.curPres;
     ecran.prevHum = ecran.curHum;
     ecran.prevQual = ecran.curQual;
     ecran.prevAcc = ecran.curAcc;
-    *ecran.prevCity = *ecran.curCity;
+    ecran.prevCity = ecran.curCity;
     ecran.prevDate = ecran.curDate;
     ecran.prevHour = ecran.curHour;
     ecran.prevIndic = ecran.curIndic;
@@ -181,7 +181,4 @@ void loop()
       }
     }
   }
-
-
-  //delay(5000);
 }
